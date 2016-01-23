@@ -33,7 +33,7 @@ RUN    apt-get update \
          libproj-dev=4.8.0-2ubuntu2 \
          libv8-dev=3.14.5.8-5ubuntu2 \
          libzmq3-dev=4.0.4+dfsg-2 \
-         openssh-server=1:6.6p1-2ubuntu2.3 \
+         openssh-server=1:6.6p1-2ubuntu2.4 \
          python3-dev=3.4.0-0ubuntu2 \
          python3-pip=1.5.4-1ubuntu3 \
          supervisor=3.0b2-1 
