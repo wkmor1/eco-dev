@@ -1,4 +1,4 @@
-FROM ubuntu:trusty-20160119
+FROM ubuntu
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Versions
@@ -21,22 +21,23 @@ RUN    mkdir -p \
 # Install Ubuntu packages
 RUN    apt-get update \
     && apt-get install -y --no-install-recommends \
-         apt-transport-https=1.0.1ubuntu2.5 \
-         cmake=2.8.12.2-0ubuntu3 \
-         curl=7.35.0-1ubuntu2.5 \
-         default-jre=2:1.7-51 \
-         gdal-bin=1.10.1+dfsg-5ubuntu1 \
-         gdebi-core=0.9.5.3 \
-         gfortran=4:4.8.2-1ubuntu6 \
-         git=1:1.9.1-1ubuntu0.2 \
-         libgdal-dev=1.10.1+dfsg-5ubuntu1 \
-         libproj-dev=4.8.0-2ubuntu2 \
-         libv8-dev=3.14.5.8-5ubuntu2 \
-         libzmq3-dev=4.0.4+dfsg-2 \
-         openssh-server=1:6.6p1-2ubuntu2.4 \
-         python3-dev=3.4.0-0ubuntu2 \
-         python3-pip=1.5.4-1ubuntu3 \
-         supervisor=3.0b2-1 
+         apt-transport-https \
+         cmake \
+         curl \
+         default-jre \
+         gdal-bin \
+         gdebi-core \
+         gfortran \
+         git \
+         libgdal-dev \
+         libproj-dev \
+         libv8-dev \
+         libzmq3-dev \
+         octave \
+         openssh-server \
+         python3-dev \
+         python3-pip \
+         supervisor 
 
 # Download Rstudio, Shiny, Julia, OpenBUGS and Zonation,
 RUN    curl \
@@ -59,8 +60,8 @@ RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" 
     &&  gpg -a --export B04C661B | apt-key add - \
     &&  apt-get update \
     &&  apt-get install -y --no-install-recommends \
-          r-base-dev=3.2.3-4trusty0 \
-          jags=4.1.0-1trusty0 \
+          r-base-dev \
+          jags \
     && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), unzip = "internal")' > /etc/R/Rprofile.site \
     && gdebi -n rstudio-server-$RSTUDIOVER-amd64.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
@@ -68,13 +69,13 @@ RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" 
     && gdebi -n openbugs_${BUGSVER}_amd64.deb 
     
 # Install Zonation
-RUN    tar xzf zonation.tar.gz
+RUN    tar xzf zonation.tar.gz -C zonation
 
 # Set locale
 ENV LANG        en_US.UTF-8
 ENV LANGUAGE    $LANG
-RUN    echo "en_US en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-    && locale-gen en_US en_US.UTF-8 \ 
+RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
+    && locale-gen en_US $LANG \ 
     && update-locale LANG=$LANG LANGUAGE=$LANG \
     && dpkg-reconfigure locales
 ENV LC_ALL      $LANG
@@ -110,4 +111,5 @@ EXPOSE 3838
 EXPOSE 8888
 EXPOSE 22
 
+# Start supervisor
 CMD    supervisord
