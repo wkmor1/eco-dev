@@ -29,6 +29,9 @@ RUN    apt-get update \
          gdebi-core \
          gfortran \
          git \
+         libboost-filesystem-dev \
+         libboost-program-options-dev \
+         libboost-thread-dev \
          libgdal-dev \
          libproj-dev \
          libv8-dev \
