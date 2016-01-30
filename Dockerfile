@@ -38,8 +38,7 @@ RUN    apt-get update \
 RUN    export RSTUDIOVER=`curl https://s3.amazonaws.com/rstudio-server/current.ver` \
     && export SHINYVER=`curl https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION` \
     && export JULIAVER=`curl -i https://api.github.com/repos/JuliaLang/julia/releases/latest | \
-         grep tag_name | cut -d \" -f4 | sed 's/v//g'` \
-    && BUGSVER 	 
+         grep tag_name | cut -d \" -f4 | sed 's/v//g'`	 
 
 # Download Rstudio, Shiny, Julia, OpenBUGS and Zonation,
 RUN    curl \
