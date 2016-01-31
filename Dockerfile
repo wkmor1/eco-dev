@@ -34,24 +34,21 @@ RUN    apt-get update \
          python3-pip \
          supervisor 
 
-# Get software versions
-RUN    export RSTUDIOVER=`curl https://s3.amazonaws.com/rstudio-server/current.ver` \
-    && export SHINYVER=`curl https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION` \
-    && export JULIAVER=`curl -i https://api.github.com/repos/JuliaLang/julia/releases/latest | \
-         grep tag_name | cut -d \" -f4 | sed 's/v//g'`	 
-
-# Download Rstudio, Shiny, Julia, OpenBUGS and Zonation,
-RUN    curl \
-         -O https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
-         -O https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$SHINYVER-amd64.deb \
-         -O https://julialang.s3.amazonaws.com/bin/linux/x64/0.4/julia-$JULIAVER-linux-x86_64.tar.gz \
+# Download Rstudio, Shiny, Julia and Zonation,
+RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
+    && SHINYVER=$(curl https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION) \
+    && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
+    && curl \
+         -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
+         -o shiny.deb https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$SHINYVER-amd64.deb \
+         -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.4/julia-$JULIAVER-linux-x86_64.tar.gz \
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz 
 
 # Install Jupyter
 RUN    pip3 install jupyter ipyparallel
 
 # Install Julia
-RUN    tar xzf julia-$JULIAVER-linux-x86_64.tar.gz -C /opt/julia --strip 1 \
+RUN    tar xzf julia.tar.gz -C /opt/julia --strip 1 \
     && ln -s /opt/julia/bin/julia /usr/local/bin/julia
 
 # Install R, RStudio, Shiny, Jags
@@ -63,9 +60,9 @@ RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" 
           r-base-dev \
           jags \
     && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), unzip = "internal")' > /etc/R/Rprofile.site \
-    && gdebi -n rstudio-server-$RSTUDIOVER-amd64.deb \
+    && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
-    && gdebi -n shiny-server-$SHINYVER-amd64.deb
+    && gdebi -n shiny.deb
     
 # Install Zonation
 RUN    tar xzf zonation.tar.gz -C zonation
@@ -84,9 +81,9 @@ RUN    apt-get clean \
     && apt-get autoremove \
     && rm -rf \
          var/lib/apt/lists \
-         julia-$JULIAVER-linux-x86_64.tar.gz \
-         rstudio-server-$RSTUDIOVER-amd64.deb \
-         shiny-server-$SHINYVER-amd64.deb \
+         julia.tar.gz \
+         rstudio.deb \
+         shiny.deb \
          home/shiny \
          zonation.tar.gz
 
