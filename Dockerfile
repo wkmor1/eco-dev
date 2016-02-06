@@ -26,6 +26,7 @@ RUN    apt-get update \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
+         libfftw3-dev \
          libgdal-dev \
          libproj-dev \
          libzmq3-dev \
