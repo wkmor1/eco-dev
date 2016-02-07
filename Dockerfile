@@ -29,6 +29,7 @@ RUN    apt-get update \
          libfftw3-dev \
          libgdal-dev \
          libproj-dev \
+         libqt4-dev \
          libzmq3-dev \
          openssh-server \
          python3-dev \
