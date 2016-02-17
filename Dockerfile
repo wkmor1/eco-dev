@@ -34,7 +34,8 @@ RUN    apt-get update \
          openssh-server \
          python3-dev \
          python3-pip \
-         supervisor 
+         supervisor \ 
+         zip
 
 # Download Rstudio, Shiny, Julia and Zonation,
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
