@@ -35,7 +35,8 @@ RUN    apt-get update \
          openssh-server \
          python3-dev \
          python3-pip \
-         supervisor \ 
+         supervisor \
+         texlive \
          zip
 
 # Download Rstudio, Shiny, Julia and Zonation,
