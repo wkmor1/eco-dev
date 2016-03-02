@@ -18,7 +18,7 @@ RUN    apt-get update \
          apt-transport-https \
          cmake \
          curl \
-         default-jre \
+         default-jdk \
          gdal-bin \
          gdebi-core \
          gfortran \
