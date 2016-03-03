@@ -37,7 +37,7 @@ RUN    apt-get update \
          python3-pip \
          supervisor \
          texlive \
-         texlive-extra \
+         texlive-latex-extra \
          zip
 
 # Download Rstudio, Shiny, Julia and Zonation,
