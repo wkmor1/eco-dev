@@ -41,7 +41,7 @@ RUN    apt-get update \
          texlive-latex-extra \
          zip
 
-# Download Rstudio, Shiny, Julia and Zonation,
+# Download Rstudio, Shiny, Julia, Zonation and inconsolata,
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && SHINYVER=$(curl https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
@@ -49,7 +49,8 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o shiny.deb https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$SHINYVER-amd64.deb \
          -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.4/julia-$JULIAVER-linux-x86_64.tar.gz \
-         -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz 
+         -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
+         -O http://mirrors.ibiblio.org/pub/mirrors/CTAN/install/fonts/inconsolata.tds.zip
 
 # Install Jupyter
 RUN    pip3 install jupyter ipyparallel
@@ -76,6 +77,13 @@ RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" 
 # Install Zonation
 RUN    tar xzf zonation.tar.gz -C zonation
 
+# Install inconsolata font
+RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
+    && echo "Map zi4.map" >> /usr/share/texlive/texmf-dist/web2c/updmap.cfg \
+    && cd /usr/share/texlive/texmf-dist \
+    && mktexlsr \
+    && updmap-sys 
+    
 # Set locale
 ENV LANG        en_US.UTF-8
 ENV LANGUAGE    $LANG
@@ -94,7 +102,8 @@ RUN    apt-get clean \
          rstudio.deb \
          shiny.deb \
          home/shiny \
-         zonation.tar.gz
+         zonation.tar.gz \
+         inconsolata.tds.zip
 
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/supervisord.conf
