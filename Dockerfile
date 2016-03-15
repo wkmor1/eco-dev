@@ -36,6 +36,7 @@ RUN    apt-get update \
          python3-dev \
          python3-pip \
          supervisor \
+         texinfo \
          texlive \
          texlive-latex-extra \
          zip
