@@ -39,6 +39,7 @@ RUN    apt-get update \
          texinfo \
          texlive \
          texlive-latex-extra \
+         texlive-xetex \
          zip
 
 # Download Rstudio, Shiny, Julia, Zonation and inconsolata,
