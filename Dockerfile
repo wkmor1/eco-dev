@@ -16,7 +16,6 @@ RUN    mkdir -p \
 RUN    apt-get update \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
-         cmake \
          curl \
          default-jdk \
          gdal-bin \
