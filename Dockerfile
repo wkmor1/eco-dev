@@ -35,6 +35,7 @@ RUN    apt-get update \
          openssh-server \
          python3-dev \
          python3-pip \
+         qpdf \
          supervisor \
          texinfo \
          texlive \
