@@ -38,6 +38,7 @@ RUN    apt-get update \
          supervisor \
          texinfo \
          texlive \
+         texlive-humanities \
          texlive-latex-extra \
          texlive-xetex \
          zip
