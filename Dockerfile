@@ -2,12 +2,11 @@ FROM ubuntu
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Set env vars
-ENV PATH        /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
+ENV PATH        /usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
 ENV R_LIBS_USER ~/.r-dir/R/library
 
 # Create directories
 RUN    mkdir -p \
-         /opt/julia \
          /zonation \
          /var/log/supervisor \
          /var/run/sshd
@@ -43,25 +42,17 @@ RUN    apt-get update \
          texlive-xetex \
          zip
 
-# Download Rstudio, Shiny, Julia, Zonation and inconsolata,
+# Download Rstudio, Zonation and inconsolata,
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
-    && SHINYVER=$(curl https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/VERSION) \
-    && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && curl \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
-         -o shiny.deb https://s3.amazonaws.com/rstudio-shiny-server-os-build/ubuntu-12.04/x86_64/shiny-server-$SHINYVER-amd64.deb \
-         -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.4/julia-$JULIAVER-linux-x86_64.tar.gz \
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -O http://mirrors.ibiblio.org/pub/mirrors/CTAN/install/fonts/inconsolata.tds.zip
 
 # Install Jupyter
-RUN    pip3 install jupyter ipyparallel
+RUN    pip3 install jupyter
 
-# Install Julia
-RUN    tar xzf julia.tar.gz -C /opt/julia --strip 1 \
-    && ln -s /opt/julia/bin/julia /usr/local/bin/julia
-
-# Install R, RStudio, Shiny, Jags
+# Install R, RStudio, Jags
 RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
     &&  gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B04C661B \
     &&  gpg -a --export B04C661B | apt-key add - \
@@ -73,8 +64,7 @@ RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" 
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
-    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin \
-    && gdebi -n shiny.deb
+    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin 
     
 # Install Zonation
 RUN    tar xzf zonation.tar.gz -C zonation
@@ -100,10 +90,7 @@ RUN    apt-get clean \
     && apt-get autoremove \
     && rm -rf \
          var/lib/apt/lists \
-         julia.tar.gz \
          rstudio.deb \
-         shiny.deb \
-         home/shiny \
          zonation.tar.gz \
          inconsolata.tds.zip
 
@@ -122,7 +109,6 @@ RUN    chgrp staff /var/log/supervisor \
 
 # Open ports
 EXPOSE 8787
-EXPOSE 3838
 EXPOSE 8888
 EXPOSE 22
 
