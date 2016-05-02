@@ -30,6 +30,7 @@ RUN    apt-get update \
          libproj-dev \
          libqt4-dev \
          libzmq3-dev \
+         lmodern \
          openssh-server \
          python3-dev \
          python3-pip \
