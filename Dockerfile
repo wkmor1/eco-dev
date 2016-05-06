@@ -43,6 +43,13 @@ RUN    apt-get update \
          texlive-xetex \
          zip
 
+# Set locale
+ENV LANG        en_US.UTF-8
+ENV LANGUAGE    $LANG
+RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
+    && locale-gen en_US $LANG \ 
+    && update-locale LANG=$LANG LANGUAGE=$LANG
+
 # Download Rstudio, Zonation and inconsolata,
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && curl \
@@ -77,15 +84,6 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
     && mktexlsr \
     && updmap-sys 
     
-# Set locale
-ENV LANG        en_US.UTF-8
-ENV LANGUAGE    $LANG
-RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
-    && locale-gen en_US $LANG \ 
-    && update-locale LANG=$LANG LANGUAGE=$LANG \
-    && dpkg-reconfigure locales
-ENV LC_ALL      $LANG
-
 # Clean up
 RUN    apt-get clean \
     && apt-get autoremove \
