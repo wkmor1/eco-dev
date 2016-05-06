@@ -90,7 +90,7 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
 RUN    apt-get clean \
     && apt-get autoremove \
     && rm -rf \
-         var/lib/apt/lists \
+         var/lib/apt/lists/* \
          rstudio.deb \
          zonation.tar.gz \
          inconsolata.tds.zip
