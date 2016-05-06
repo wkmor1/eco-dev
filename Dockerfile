@@ -34,6 +34,7 @@ RUN    apt-get update \
          openssh-server \
          python3-dev \
          python3-pip \
+         python3-setuptools \
          qpdf \
          supervisor \
          texinfo \
