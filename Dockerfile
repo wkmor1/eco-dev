@@ -36,6 +36,7 @@ RUN    apt-get update \
          python3-pip \
          python3-setuptools \
          qpdf \
+         sudo \
          supervisor \
          texinfo \
          texlive \
