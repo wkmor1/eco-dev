@@ -70,7 +70,7 @@ RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" 
     &&  apt-get install -y --no-install-recommends \
           r-base-dev \
           jags \
-    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), unzip = "internal")' > /etc/R/Rprofile.site \
+    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' > /etc/R/Rprofile.site \
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
