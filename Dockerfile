@@ -42,7 +42,6 @@ RUN    apt-get update \
          texlive \
          texlive-humanities \
          texlive-latex-extra \
-         texlive-xetex \
          zip
 
 # Set locale
