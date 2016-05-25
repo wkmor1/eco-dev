@@ -17,6 +17,7 @@ RUN    apt-get update \
          apt-transport-https \
          curl \
          default-jdk \
+         default-jre \
          gdal-bin \
          gdebi-core \
          gfortran \
@@ -62,14 +63,16 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
 RUN    pip3 install jupyter
 
 # Install R, RStudio, Jags
-RUN     echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
-    &&  gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B04C661B \
-    &&  gpg -a --export B04C661B | apt-key add - \
-    &&  apt-get update \
-    &&  apt-get install -y --no-install-recommends \
-          r-base-dev \
-          jags \
+RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
+    && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B04C661B \
+    && gpg -a --export B04C661B | apt-key add - \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends \
+         r-base-dev \
+         jags \
+    && R CMD javareconf \
     && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' > /etc/R/Rprofile.site \
+    && R -e 'install.packages("rJava")' \
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
