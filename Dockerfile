@@ -2,11 +2,12 @@ FROM ubuntu:trusty
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Set env vars
-ENV PATH        /usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
+ENV PATH        /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
 ENV R_LIBS_USER ~/.r-dir/R/library
 
 # Create directories
 RUN    mkdir -p \
+         /opt/julia \
          /zonation \
          /var/log/supervisor \
          /var/run/sshd
@@ -52,15 +53,21 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \ 
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
-# Download Rstudio, Zonation and inconsolata,
+# Download Rstudio, Julia, Zonation and inconsolata
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
+    && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && curl \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
+         -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.4/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -O http://mirrors.ibiblio.org/pub/mirrors/CTAN/install/fonts/inconsolata.tds.zip
 
 # Install Jupyter
 RUN    pip3 install jupyter sympy
+
+# Install Julia
+RUN    tar xzf julia.tar.gz -C /opt/julia --strip 1 \
+    && ln -s /opt/julia/bin/julia /usr/local/bin/julia
 
 # Install R, RStudio, Jags
 RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
@@ -93,6 +100,7 @@ RUN    apt-get clean \
     && apt-get autoremove \
     && rm -rf \
          var/lib/apt/lists/* \
+         julia.tar.gz \ 
          rstudio.deb \
          zonation.tar.gz \
          inconsolata.tds.zip
