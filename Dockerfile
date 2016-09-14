@@ -1,17 +1,6 @@
 FROM ubuntu:trusty
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
-# Set env vars
-ENV PATH        /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
-ENV R_LIBS_USER ~/.r-dir/R/library
-
-# Create directories
-RUN    mkdir -p \
-         /opt/julia \
-         /zonation \
-         /var/log/supervisor \
-         /var/run/sshd
-
 # Install Ubuntu packages
 RUN    apt-get update \
     && apt-get install -y --no-install-recommends \
@@ -44,7 +33,10 @@ RUN    apt-get update \
          texlive \
          texlive-humanities \
          texlive-latex-extra \
-         zip
+         zip \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf var/lib/apt/lists/*
 
 # Set locale
 ENV LANG        en_US.UTF-8
@@ -53,7 +45,7 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \ 
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
-# Download Rstudio, Julia, Zonation and inconsolata
+# Download Rstudio, Julia, Zonation and Inconsolata
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && curl \
@@ -63,13 +55,16 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -O http://mirrors.ibiblio.org/pub/mirrors/CTAN/install/fonts/inconsolata.tds.zip
 
 # Install Jupyter
-RUN    pip3 install jupyter sympy
+RUN    pip3 install jupyter
 
 # Install Julia
-RUN    tar xzf julia.tar.gz -C /opt/julia --strip 1 \
+RUN    mkdir -p /opt/julia \
+    && tar xzf julia.tar.gz -C /opt/julia --strip 1 \
     && ln -s /opt/julia/bin/julia /usr/local/bin/julia
+    && rm -rf julia.tar.gz
 
-# Install R, RStudio, Jags
+# Install R, RStudio, rJava and JAGS
+ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B04C661B \
     && gpg -a --export B04C661B | apt-key add - \
@@ -83,28 +78,27 @@ RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
-    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin 
+    && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin \
+    && apt-get clean \
+    && apt-get autoremove \
+    && rm -rf var/lib/apt/lists/* rstudio.deb
     
 # Install Zonation
-RUN    tar xzf zonation.tar.gz -C zonation
+RUN && mkdir -p zonation \
+    && tar xzf zonation.tar.gz -C zonation \
+    && rm -rf zonation.tar.gz
 
-# Install inconsolata font
+# Set path
+ENV PATH        /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
+
+# Install Inconsolata
 RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
     && echo "Map zi4.map" >> /usr/share/texlive/texmf-dist/web2c/updmap.cfg \
     && cd /usr/share/texlive/texmf-dist \
     && mktexlsr \
-    && updmap-sys 
+    && updmap-sys \
+    && rm -rf inconsolata.tds.zip
     
-# Clean up
-RUN    apt-get clean \
-    && apt-get autoremove \
-    && rm -rf \
-         var/lib/apt/lists/* \
-         julia.tar.gz \ 
-         rstudio.deb \
-         zonation.tar.gz \
-         inconsolata.tds.zip
-
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY   userconf.sh /usr/bin/userconf.sh
@@ -112,7 +106,8 @@ COPY   jupyter_notebook_config.py jupyter_notebook_config.py
 COPY   sshd_config /etc/ssh/sshd_config
 
 # Config
-RUN    chgrp staff /var/log/supervisor \
+RUN    mkdir -p /var/log/supervisor /var/run/sshd \  
+    && chgrp staff /var/log/supervisor \
     && chmod g+w /var/log/supervisor \
     && chgrp staff /etc/supervisor/conf.d/supervisord.conf \
     && git config --system push.default simple \
