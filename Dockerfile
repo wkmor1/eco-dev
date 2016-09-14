@@ -60,7 +60,7 @@ RUN    pip3 install jupyter
 # Install Julia
 RUN    mkdir -p /opt/julia \
     && tar xzf julia.tar.gz -C /opt/julia --strip 1 \
-    && ln -s /opt/julia/bin/julia /usr/local/bin/julia
+    && ln -s /opt/julia/bin/julia /usr/local/bin/julia \
     && rm -rf julia.tar.gz
 
 # Install R, RStudio, rJava and JAGS
@@ -89,7 +89,7 @@ RUN && mkdir -p zonation \
     && rm -rf zonation.tar.gz
 
 # Set path
-ENV PATH        /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
+ENV PATH /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
 
 # Install Inconsolata
 RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
