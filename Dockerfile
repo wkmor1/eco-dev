@@ -84,7 +84,7 @@ RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >
     && rm -rf var/lib/apt/lists/* rstudio.deb
     
 # Install Zonation
-RUN && mkdir -p zonation \
+RUN    mkdir -p zonation \
     && tar xzf zonation.tar.gz -C zonation \
     && rm -rf zonation.tar.gz
 
