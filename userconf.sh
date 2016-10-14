@@ -7,6 +7,7 @@ export HOME=/home/$USER
 useradd -u $USERID $USER
 addgroup $USER staff
 echo "$USER:$PASSWORD" | chpasswd
+chmod go-rx /usr/bin/passwd
 mkdir -p $HOME/.jupyter/
 mv jupyter_notebook_config.py $_
 
