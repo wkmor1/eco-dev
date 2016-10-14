@@ -102,7 +102,7 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY   userconf.sh /usr/bin/userconf.sh
-COPY   jupyter_notebook_config.py jupyter_notebook_config.py
+COPY   jupyter_notebook_config.py /jupyter_notebook_config.py
 COPY   sshd_config /etc/ssh/sshd_config
 
 # Config
