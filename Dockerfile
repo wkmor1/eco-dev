@@ -2,7 +2,7 @@ FROM ubuntu:trusty
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Install Ubuntu packages
-RUN    echo "deb https://archive.ubuntu.com/ trusty-backports main restricted universe" >> /etc/apt/sources.list \
+RUN    echo "deb http://archive.ubuntu.com/ trusty-backports main restricted universe" >> /etc/apt/sources.list \
        apt-get update \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
