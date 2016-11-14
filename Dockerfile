@@ -2,7 +2,8 @@ FROM ubuntu:trusty
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Install Ubuntu packages
-RUN    apt-get update \
+RUN    echo "deb https://archive.ubuntu.com/ trusty-backports main restricted universe" >> /etc/apt/sources.list \
+       apt-get update \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
          curl \
@@ -65,7 +66,7 @@ RUN    mkdir -p /opt/julia \
 
 # Install R, RStudio, rJava and JAGS
 ENV R_LIBS_USER ~/.r-dir/R/library
-RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
+RUN    echo "deb https://cran.rstudio.com/ubuntu trusty/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
     && gpg -a --export E084DAB9 | apt-key add - \
     && apt-get update \
