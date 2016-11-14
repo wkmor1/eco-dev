@@ -66,8 +66,8 @@ RUN    mkdir -p /opt/julia \
 # Install R, RStudio, rJava and JAGS
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo "deb http://ppa.launchpad.net/marutter/rrutter/ubuntu trusty main" >> /etc/apt/sources.list \
-    && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys B04C661B \
-    && gpg -a --export B04C661B | apt-key add - \
+    && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
+    && gpg -a --export E084DAB9 | apt-key add - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
          r-base-dev \
