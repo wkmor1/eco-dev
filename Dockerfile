@@ -65,7 +65,7 @@ RUN    mkdir -p /opt/julia \
 
 # Install R, RStudio, rJava and JAGS
 ENV R_LIBS_USER ~/.r-dir/R/library
-RUN    echo "deb https://cran.rstudio.com/ubuntu trusty/" >> /etc/apt/sources.list \
+RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
     && gpg -a --export E084DAB9 | apt-key add - \
     && apt-get update \
