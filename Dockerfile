@@ -35,7 +35,6 @@ RUN    apt-get update \
          texlive \
          texlive-humanities \
          texlive-latex-extra \
-         texlive-pictures \
          zip \
     && apt-get clean \
     && apt-get autoremove \
