@@ -24,6 +24,7 @@ RUN    apt-get update \
          libzmq3-dev \
          lmodern \
          openssh-server \
+         pdf2svg \
          python3-dev \
          python3-pip \
          python3-setuptools \
@@ -34,6 +35,7 @@ RUN    apt-get update \
          texlive \
          texlive-humanities \
          texlive-latex-extra \
+         texlive-pictures \
          zip \
     && apt-get clean \
     && apt-get autoremove \
