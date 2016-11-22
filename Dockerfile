@@ -13,6 +13,7 @@ RUN    apt-get update \
          gdebi-core \
          gfortran \
          git \
+         libavcodec-extra-54 \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
