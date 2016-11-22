@@ -6,6 +6,7 @@ RUN    apt-get update \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
          curl \
+         cmake \
          default-jdk \
          default-jre \
          gdal-bin \
