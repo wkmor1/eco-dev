@@ -19,6 +19,7 @@ RUN    apt-get update \
          libcairo2-dev \
          libfftw3-dev \
          libgdal-dev \
+         libmagickwand5 \
          libproj-dev \
          libqt4-dev \
          libzmq3-dev \
