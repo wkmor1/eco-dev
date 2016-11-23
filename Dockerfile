@@ -14,6 +14,7 @@ RUN    apt-get update \
          gfortran \
          git \
          libavcodec-extra-54 \
+         libavfilter3 \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
