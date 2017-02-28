@@ -61,7 +61,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -O http://mirrors.ibiblio.org/pub/mirrors/CTAN/install/fonts/inconsolata.tds.zip
 
 # Install Jupyter
-RUN    pip3 install jupyter
+RUN    pip3 install --upgrade pip && pip3 install jupyter
 
 # Install Julia
 RUN    mkdir -p /opt/julia \
