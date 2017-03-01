@@ -62,7 +62,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
 
 # Install Jupyter
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 --upgrade six \
+    && /usr/local/bin/pip3 install --upgrade six \
     && /usr/local/bin/pip3 install jupyter
 
 # Install Julia
