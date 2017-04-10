@@ -119,7 +119,7 @@ RUN    mkdir -p /var/log/supervisor /var/run/sshd \
     && chmod g+w /var/log/supervisor \
     && chgrp staff /etc/supervisor/conf.d/supervisord.conf \
     && git config --system push.default simple \
-    && git config --system url.'https://github.com/'.insteadOf git://github.com/
+    && git config --system url.'https://github.com/'.insteadOf git://github.com/ \
     && git config --system credential.helper 'cache --timeout=31536000'
 
 # Open ports
