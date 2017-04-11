@@ -39,6 +39,7 @@ RUN    apt-get update \
          texlive \
          texlive-humanities \
          texlive-latex-extra \
+         texlive-bibtex-extra \
          zip \
     && apt-get clean \
     && apt-get autoremove \
