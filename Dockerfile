@@ -59,7 +59,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.5/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
-         -O http://mirrors.ibiblio.org/pub/mirrors/CTAN/install/fonts/inconsolata.tds.zip
+         -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip
 
 # Install Jupyter
 RUN    pip3 install --upgrade pip \
