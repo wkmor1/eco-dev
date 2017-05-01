@@ -28,6 +28,7 @@ RUN    apt-get update \
          libzmq3-dev \
          lmodern \
          openssh-server \
+         pgf \
          pdf2svg \
          python3-dev \
          python3-pip \
