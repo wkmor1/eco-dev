@@ -11,7 +11,7 @@ chmod go-rx /usr/bin/passwd
 mkdir -p $HOME/.jupyter/
 mv jupyter_notebook_config.py $_
 
-echo -e "[user]\n\tname = $USER\n\temail = $EMAIL\n\n[credential]\n\thelper = cache\n" > $HOME/.gitconfig
+echo -e "[user]\n\tname = $USER\n\temail = $EMAIL\n\n[credential]\n\thelper = cache --timeout=31536000\n" > $HOME/.gitconfig
 
 if [ "$ROOT" == "TRUE" ]
   then
