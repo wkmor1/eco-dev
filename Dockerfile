@@ -50,7 +50,7 @@ RUN    apt-get update \
 ENV LANG        en_US.UTF-8
 ENV LANGUAGE    $LANG
 RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
-    && locale-gen en_US $LANG \ 
+    && locale-gen en_US $LANG \
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
 # Download Rstudio, Julia, Zonation and Inconsolata
@@ -58,7 +58,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && curl \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
-         -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.5/julia-$JULIAVER-linux-x86_64.tar.gz \ 
+         -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.6/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip
 
@@ -92,7 +92,7 @@ RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/* rstudio.deb
-    
+
 # Install Zonation
 RUN    mkdir -p zonation \
     && tar xzf zonation.tar.gz -C zonation \
@@ -108,7 +108,7 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
     && mktexlsr \
     && updmap-sys \
     && rm -rf inconsolata.tds.zip
-    
+
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/
 COPY   userconf.sh /usr/bin/
@@ -116,12 +116,12 @@ COPY   jupyter_notebook_config.py /
 COPY   sshd_config /etc/ssh/
 
 # Config
-RUN    mkdir -p /var/log/supervisor /var/run/sshd \  
+RUN    mkdir -p /var/log/supervisor /var/run/sshd \
     && chgrp staff /var/log/supervisor \
     && chmod g+w /var/log/supervisor \
     && chgrp staff /etc/supervisor/conf.d/supervisord.conf \
     && git config --system push.default simple \
-    && git config --system url.'https://github.com/'.insteadOf git://github.com/ 
+    && git config --system url.'https://github.com/'.insteadOf git://github.com/
 
 # Open ports
 EXPOSE 8787
