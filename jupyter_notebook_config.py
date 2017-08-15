@@ -13,7 +13,7 @@ c.NotebookApp.allow_origin = '*'
 c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.notebook_dir = '/home/'+USER
-c.NotebookApp.base_url = USER+'-jupyter'
+c.NotebookApp.base_url = '/'USER+'-jupyter/'
 c.NotebookApp.tornado_settings = { 'static_url_prefix': '/'+USER+'-jupyter/static/' }
 c.NotebookApp.trust_xheaders = True
 c.NotebookApp.server_extensions.append('ipyparallel.nbextension')
