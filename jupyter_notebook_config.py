@@ -16,7 +16,6 @@ c.NotebookApp.notebook_dir = '/home/'+USER
 c.NotebookApp.base_url = '/'+USER+'-jupyter/'
 c.NotebookApp.tornado_settings = { 'static_url_prefix': '/'+USER+'-jupyter/static/' }
 c.NotebookApp.trust_xheaders = True
-c.NotebookApp.server_extensions.append('ipyparallel.nbextension')
 	
 from IPython.lib import passwd
 c.NotebookApp.password = passwd(os.environ['PASSWORD'])
