@@ -15,7 +15,7 @@ echo -e "[user]\n\tname = $USER\n\temail = $EMAIL\n\n[credential]\n\thelper = ca
 
 if [ "$ROOT" == "TRUE" ]
   then
-    adduser $USER sudo && echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers && echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/notebook
+    adduser $USER sudo && echo "%sudo ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers && echo "$USER ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/notebook
 fi
 
 env | cat >> /etc/R/Renviron
