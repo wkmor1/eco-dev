@@ -26,6 +26,7 @@ RUN    apt-get update \
          libproj-dev \
          libqt4-dev \
          libzmq3-dev \
+         libxt-dev \
          lmodern \
          openssh-server \
          pgf \
