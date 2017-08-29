@@ -26,6 +26,7 @@ RUN    apt-get update \
          libproj-dev \
          librsvg2-dev \
          libqt4-dev \
+         libv8-dev \
          libzmq3-dev \
          lmodern \
          openssh-server \
