@@ -24,9 +24,9 @@ RUN    apt-get update \
          libgdal-dev \
          libmagickwand5 \
          libproj-dev \
+         librsvg2-dev \
          libqt4-dev \
          libzmq3-dev \
-         libxt-dev \
          lmodern \
          openssh-server \
          pgf \
