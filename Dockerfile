@@ -9,6 +9,7 @@ RUN    apt-get update \
          cmake \
          default-jdk \
          default-jre \
+         fonts-texgyre \
          gdal-bin \
          gdebi-core \
          gfortran \
