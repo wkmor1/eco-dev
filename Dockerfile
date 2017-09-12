@@ -10,6 +10,7 @@ RUN    apt-get update \
          default-jdk \
          default-jre \
          fonts-texgyre \
+         fonts-droid \
          gdal-bin \
          gdebi-core \
          gfortran \
@@ -23,6 +24,7 @@ RUN    apt-get update \
          libcairo2-dev \
          libfftw3-dev \
          libgdal-dev \
+         libmagick++-dev \
          libmagickwand5 \
          libproj-dev \
          librsvg2-dev \
