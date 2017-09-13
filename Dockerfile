@@ -27,6 +27,7 @@ RUN    apt-get update \
          libgdal-dev \
          libmagick++-dev \
          libmagickwand5 \
+         libpoppler-cpp-dev \
          libproj-dev \
          librsvg2-dev \
          libqt4-dev \
