@@ -14,6 +14,7 @@ RUN    apt-get update \
          gdal-bin \
          gdebi-core \
          gfortran \
+         ghostscript \
          git \
          libavcodec-extra-54 \
          libavdevice53 \
