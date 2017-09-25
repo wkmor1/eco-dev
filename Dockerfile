@@ -11,6 +11,7 @@ RUN    apt-get update \
          default-jre \
          fonts-texgyre \
          fonts-droid \
+         g++-multilib \
          gdal-bin \
          gdebi-core \
          gfortran \
@@ -67,7 +68,8 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o julia.tar.gz https://julialang.s3.amazonaws.com/bin/linux/x64/0.6/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
-         -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip
+         -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
+         -o OpenBUGS-3.2.3.tar.gz -L "http://www.openbugs.net/w/OpenBUGS_3_2_3?action=AttachFile&do=get&target=OpenBUGS-3.2.3.tar.gz"
 
 # Install Jupyter
 RUN    pip3 install --upgrade pip \
@@ -105,6 +107,16 @@ RUN    mkdir -p zonation \
     && tar xzf zonation.tar.gz -C zonation \
     && rm -rf zonation.tar.gz
 
+# Install OpenBUGS
+RUN    tar zxf OpenBUGS-3.2.3.tar.gz \
+    && cd OpenBUGS-3.2.3 \
+    && ./configure \
+    && make \
+    && make install \
+    && cd / \
+    && rm OpenBUGS-3.2.3.tar.gz \
+    && rm -rf OpenBUGS-3.2.3
+
 # Set path
 ENV PATH /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
 
@@ -114,6 +126,7 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
     && cd /usr/share/texlive/texmf-dist \
     && mktexlsr \
     && updmap-sys \
+    && cd / \
     && rm -rf inconsolata.tds.zip
 
 # Copy scripts
