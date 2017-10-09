@@ -61,7 +61,7 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
-# Download Rstudio, Julia, Zonation and Inconsolata
+# Download Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && curl \
