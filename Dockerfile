@@ -64,7 +64,7 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
 # Download Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
-    && JULIAMAJOR=$(cut -c -3 <<< $JULIAVER) \
+    && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
     && curl \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
