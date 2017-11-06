@@ -64,9 +64,10 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
 # Download Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
 RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
+    && JULIAMAJOR=$(cut -c -3 <<< $JULIAVER) \
     && curl \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
-         -o julia.tar.gz https://julialang-s3.julialang.org//bin/linux/x64/${JULIAVER:0:3}/julia-$JULIAVER-linux-x86_64.tar.gz \ 
+         -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L "http://www.openbugs.net/w/OpenBUGS_3_2_3?action=AttachFile&do=get&target=OpenBUGS-3.2.3.tar.gz"
