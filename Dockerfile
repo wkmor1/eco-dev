@@ -119,7 +119,7 @@ RUN    tar zxf OpenBUGS-3.2.3.tar.gz \
     && rm -rf OpenBUGS-3.2.3
 
 # Install TensorFlow
-pip3 install tensorflow-gpu
+RUN pip3 install tensorflow-gpu
 
 # Set path
 ENV PATH /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
