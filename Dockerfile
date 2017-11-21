@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu14.04
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Install Ubuntu packages
@@ -24,6 +24,7 @@ RUN    apt-get update \
          libboost-program-options-dev \
          libboost-thread-dev \
          libcairo2-dev \
+         libcupti-dev \
          libfftw3-dev \
          libgdal-dev \
          libmagick++-dev \
@@ -54,9 +55,12 @@ RUN    apt-get update \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/*
 
-# Set locale
-ENV LANG        en_US.UTF-8
-ENV LANGUAGE    $LANG
+# Set paths and locale
+ENV CUDA_HOME       /usr/local/cuda
+ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$CUDA_HOME/lib64
+ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$CUDA_HOME/bin:$PATH
+ENV LANG            en_US.UTF-8
+ENV LANGUAGE        $LANG
 RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \
     && update-locale LANG=$LANG LANGUAGE=$LANG
@@ -72,10 +76,9 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L "http://www.openbugs.net/w/OpenBUGS_3_2_3?action=AttachFile&do=get&target=OpenBUGS-3.2.3.tar.gz"
 
-# Install Jupyter
-RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install --upgrade six \
-    && /usr/local/bin/pip3 install notebook
+# Install Jupyter and TensorFlow
+RUN    /usr/local/bin/pip3 install --upgrade pip \
+    && /usr/local/bin/pip3 install --upgrade six notebook tensorflow-gpu
 
 # Install Julia
 RUN    mkdir -p /opt/julia \
@@ -117,12 +120,6 @@ RUN    tar zxf OpenBUGS-3.2.3.tar.gz \
     && cd / \
     && rm OpenBUGS-3.2.3.tar.gz \
     && rm -rf OpenBUGS-3.2.3
-
-# Install TensorFlow
-RUN pip3 install tensorflow-gpu
-
-# Set path
-ENV PATH /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$PATH
 
 # Install Inconsolata
 RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
