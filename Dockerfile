@@ -1,4 +1,4 @@
-FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu14.04
+FROM ubuntu:trusty
 MAINTAINER William K Morris <wkmor1@gmail.com>
 
 # Install Ubuntu packages
@@ -24,7 +24,6 @@ RUN    apt-get update \
          libboost-program-options-dev \
          libboost-thread-dev \
          libcairo2-dev \
-         libcupti-dev \
          libfftw3-dev \
          libgdal-dev \
          libmagick++-dev \
@@ -56,9 +55,7 @@ RUN    apt-get update \
     && rm -rf var/lib/apt/lists/*
 
 # Set paths and locale
-ENV CUDA_HOME       /usr/local/cuda
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$CUDA_HOME/lib64
-ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4:$CUDA_HOME/bin:$PATH
+ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4/bin:$PATH
 ENV LANG            en_US.UTF-8
 ENV LANGUAGE        $LANG
 RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
@@ -78,7 +75,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
 
 # Install Jupyter and TensorFlow
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install --upgrade six notebook tensorflow-gpu
+    && /usr/local/bin/pip3 install --upgrade six notebook tensorflow
 
 # Install Julia
 RUN    mkdir -p /opt/julia \
