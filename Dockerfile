@@ -77,7 +77,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -o OpenBUGS-3.2.3.tar.gz -L "http://www.openbugs.net/w/OpenBUGS_3_2_3?action=AttachFile&do=get&target=OpenBUGS-3.2.3.tar.gz"
 
 # Install Jupyter and TensorFlow
-RUN    /usr/local/bin/pip3 install --upgrade pip \
+RUN    pip3 install --upgrade pip \
     && /usr/local/bin/pip3 install --upgrade six notebook tensorflow-gpu
 
 # Install Julia
