@@ -1,5 +1,5 @@
 FROM ubuntu:trusty
-MAINTAINER William K Morris <wkmor1@gmail.com>
+MAINTAINER William K Morris <>
 
 # Install Ubuntu packages
 RUN    apt-get update \
@@ -130,8 +130,7 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/
 COPY   userconf.sh /usr/bin/
-COPY   jupyter_notebook_config.py /
-COPY   sshd_config /etc/ssh/
+COPY   jupyter_notebook_config.py
 
 # Config
 RUN    mkdir -p /var/log/supervisor /var/run/sshd \
@@ -144,7 +143,6 @@ RUN    mkdir -p /var/log/supervisor /var/run/sshd \
 # Open ports
 EXPOSE 8787
 EXPOSE 8888
-EXPOSE 22
 
 # Start supervisor
 CMD    supervisord
