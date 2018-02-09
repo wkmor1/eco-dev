@@ -75,7 +75,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
 
 # Install Jupyter and TensorFlow
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install --upgrade six notebook tensorflow
+    && /usr/local/bin/pip3 install --upgrade six tensorflow
 
 # Install Julia
 RUN    mkdir -p /opt/julia \
@@ -130,8 +130,6 @@ RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/
 COPY   userconf.sh /usr/bin/
-COPY   jupyter_notebook_config.py /
-COPY   sshd_config /etc/ssh/
 
 # Config
 RUN    mkdir -p /var/log/supervisor /var/run/sshd \
@@ -143,8 +141,5 @@ RUN    mkdir -p /var/log/supervisor /var/run/sshd \
 
 # Open ports
 EXPOSE 8787
-EXPOSE 8888
-EXPOSE 22
-
 # Start supervisor
 CMD    supervisord
