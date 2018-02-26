@@ -39,6 +39,7 @@ RUN    apt-get update \
          pgf \
          pdf2svg \
          python3-dev \
+         python3-gdal \
          python3-pip \
          python3-setuptools \
          qpdf \
@@ -73,9 +74,9 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L "http://www.openbugs.net/w/OpenBUGS_3_2_3?action=AttachFile&do=get&target=OpenBUGS-3.2.3.tar.gz"
 
-# Install Jupyter and TensorFlow
+# Install TensorFlow and pyDEM
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install --upgrade six tensorflow
+    && /usr/local/bin/pip3 install --upgrade six tensorflow Cython pyDEM
 
 # Install Julia
 RUN    mkdir -p /opt/julia \
