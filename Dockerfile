@@ -71,7 +71,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
-         -o OpenBUGS-3.2.3.tar.gz -L "http://www.openbugs.net/w/OpenBUGS_3_2_3?action=AttachFile&do=get&target=OpenBUGS-3.2.3.tar.gz"
+         -o OpenBUGS-3.2.3.tar.gz -L https://github.com/jsta/openbugs/archive/3.2.3.tar.gz
 
 # Install Jupyter and TensorFlow
 RUN    pip3 install --upgrade pip \
