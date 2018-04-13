@@ -1,5 +1,5 @@
 FROM ubuntu:trusty
-MAINTAINER William K Morris <wkmor1@gmail.com>
+MAINTAINER William K Morris <>
 
 # Install Ubuntu packages
 RUN    apt-get update \
