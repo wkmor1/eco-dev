@@ -109,14 +109,15 @@ RUN    mkdir -p zonation \
     && rm -rf zonation.tar.gz
 
 # Install OpenBUGS
-RUN    tar zxf OpenBUGS-3.2.3.tar.gz \
-    && cd OpenBUGS-3.2.3 \
+RUN    mkdir -p openbugs \
+    && tar xzf OpenBUGS-3.2.3.tar.gz -C openbugs --strip 1 \
+    && cd openbugs \
     && ./configure \
     && make \
     && make install \
     && cd / \
     && rm OpenBUGS-3.2.3.tar.gz \
-    && rm -rf OpenBUGS-3.2.3
+    && rm -rf openbugs
 
 # Install Inconsolata
 RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
