@@ -75,7 +75,7 @@ RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
 
 # Install Jupyter and TensorFlow
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 installsix notebook tensorflow --ignore-installed six
+    && /usr/local/bin/pip3 install notebook tensorflow --ignore-installed six
 
 # Install Julia
 RUN    mkdir -p /opt/julia \
