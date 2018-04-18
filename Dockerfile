@@ -39,6 +39,7 @@ RUN    apt-get update \
          pgf \
          pdf2svg \
          python3-dev \
+         python3-gdal \
          python3-pip \
          python3-setuptools \
          qpdf \
