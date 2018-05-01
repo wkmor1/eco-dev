@@ -17,6 +17,7 @@ RUN    apt-get update \
          gfortran \
          ghostscript \
          git \
+         gpg \
          libavcodec-extra \
          libavdevice-dev\
          libavfilter-dev \
