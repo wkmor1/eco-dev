@@ -1,4 +1,4 @@
-FROM ubuntu:trusty
+FROM ubuntu:bionic
 MAINTAINER William K Morris <>
 
 # Install Ubuntu packages
@@ -10,16 +10,16 @@ RUN    apt-get update \
          default-jdk \
          default-jre \
          fonts-texgyre \
-         fonts-droid \
+         fonts-droid-fallback \
          g++-multilib \
          gdal-bin \
          gdebi-core \
          gfortran \
          ghostscript \
          git \
-         libavcodec-extra-54 \
-         libavdevice53 \
-         libavfilter3 \
+         libavcodec-extra \
+         libavdevice-dev\
+         libavfilter-dev \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
@@ -27,7 +27,8 @@ RUN    apt-get update \
          libfftw3-dev \
          libgdal-dev \
          libmagick++-dev \
-         libmagickwand5 \
+         libmagickwand-dev \
+         libpgf-dev \
          libpoppler-cpp-dev \
          libproj-dev \
          librsvg2-dev \
@@ -35,7 +36,6 @@ RUN    apt-get update \
          libv8-dev \
          libzmq3-dev \
          lmodern \
-         pgf \
          pdf2svg \
          python3-dev \
          python3-gdal \
@@ -85,7 +85,7 @@ RUN    mkdir -p /opt/julia \
 
 # Install R, RStudio, rJava and JAGS
 ENV R_LIBS_USER ~/.r-dir/R/library
-RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list \
+RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
     && gpg -a --export E084DAB9 | apt-key add - \
     && apt-get update \
