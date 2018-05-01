@@ -35,6 +35,7 @@ RUN    apt-get update \
          libqt4-dev \
          libv8-dev \
          libzmq3-dev \
+         locales \
          lmodern \
          pdf2svg \
          python3-dev \
