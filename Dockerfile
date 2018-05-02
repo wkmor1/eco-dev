@@ -51,6 +51,7 @@ RUN    apt-get update \
          texlive-humanities \
          texlive-latex-extra \
          texlive-bibtex-extra \
+         tzdata \
          zip \
     && apt-get clean \
     && apt-get autoremove \
