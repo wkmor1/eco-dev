@@ -24,19 +24,24 @@ RUN    apt-get update \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
-         libcairo2-dev \
+         libbz2-dev \
+         libcurl4-openssl-dev
          libfftw3-dev \
          libgdal-dev \
+         libicu-dev \
+         liblzma5 \
          libmagick++-dev \
-         libmagickwand-dev \
          libopenblas-dev \
+         libpango1.0-dev \
          libpgf-dev \
          libpoppler-cpp-dev \
          libproj-dev \
+         libreadline-dev \
          librsvg2-dev \
+         libtiff5-dev \
          libqt4-dev \
          libv8-dev \
-         libzmq3-dev \
+         libzmq3-dev 
          locales \
          lmodern \
          pdf2svg \
