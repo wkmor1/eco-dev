@@ -48,17 +48,21 @@ RUN    apt-get update \
          python3-dev \
          python3-gdal \
          python3-pip \
-         python3-setuptools \
          qpdf \
          sudo \
          supervisor \
+         tk8.6-dev \
          texinfo \
          texlive \
-         texlive-humanities \
-         texlive-latex-extra \
          texlive-bibtex-extra \
-         tzdata \
-         zip \
+         texlive-extra-utils \
+         texlive-fonts-extra \
+         texlive-humanities \
+         texlive-latex-extra \ 
+         unzip \
+         xfonts-base \
+         xvfb \
+zip \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/*
@@ -157,15 +161,6 @@ RUN    mkdir -p openbugs \
     && cd / \
     && rm OpenBUGS-3.2.3.tar.gz \
     && rm -rf openbugs
-
-# Install Inconsolata
-RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
-    && echo "Map zi4.map" >> /usr/share/texlive/texmf-dist/web2c/updmap.cfg \
-    && cd /usr/share/texlive/texmf-dist \
-    && mktexlsr \
-    && updmap-sys \
-    && cd / \
-    && rm -rf inconsolata.tds.zip
 
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/
