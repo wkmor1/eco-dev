@@ -19,13 +19,13 @@ RUN    apt-get update \
          git \
          gnupg \
          libavcodec-extra \
-         libavdevice-dev\
+         libavdevice-dev \
          libavfilter-dev \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
          libbz2-dev \
-         libcurl4-openssl-dev
+         libcurl4-openssl-dev \
          libfftw3-dev \
          libgdal-dev \
          libicu-dev \
@@ -41,7 +41,7 @@ RUN    apt-get update \
          libtiff5-dev \
          libqt4-dev \
          libv8-dev \
-         libzmq3-dev 
+         libzmq3-dev \
          locales \
          lmodern \
          pdf2svg \
