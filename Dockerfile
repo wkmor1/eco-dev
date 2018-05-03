@@ -123,7 +123,6 @@ RUN    mkdir -p r-source \
     && rm r-source.tar.gz \
     && rm -rf r-source
 
-
 # Install RStudio, rJava and JAGS
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
@@ -133,7 +132,7 @@ RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/
     && apt-get install -y --no-install-recommends \
          jags \
     && R CMD javareconf \
-    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' > /etc/R/Rprofile.site \
+    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages("rJava")' \
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
