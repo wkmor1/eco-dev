@@ -9,7 +9,6 @@ RUN    apt-get update \
          curl \
          cmake \
          default-jdk \
-         default-jre \
          fonts-texgyre \
          fonts-droid-fallback \
          g++-multilib \
@@ -30,6 +29,7 @@ RUN    apt-get update \
          libgdal-dev \
          libmagick++-dev \
          libmagickwand-dev \
+         libopenblas-dev \
          libpgf-dev \
          libpoppler-cpp-dev \
          libproj-dev \
@@ -66,11 +66,13 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
-# Download Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
-RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
+# Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
+RUN    RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | grep h3 | head -1 | sed 's/<[^>]*>//g' | sed 's/[A-Z ]*//g') \
+    && RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
     && curl \
+         -o r-source.tar.gz https://cran.r-project.org/src/base/R-3/R-$RVER.tar.gz \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
@@ -87,14 +89,43 @@ RUN    mkdir -p /opt/julia \
     && ln -s /opt/julia/bin/julia /usr/local/bin/julia \
     && rm -rf julia.tar.gz
 
-# Install R, RStudio, rJava and JAGS
+# Install R
+RUN    mkdir -p r-source \ 
+    && tar xzf r-source.tar.gz -C r-source --strip 1 \
+    && cd r-source \
+    && R_PAPERSIZE=letter \
+       R_BATCHSAVE="--no-save --no-restore" \
+       R_BROWSER=xdg-open \
+       PAGER=/usr/bin/pager \
+       PERL=/usr/bin/perl \
+       R_UNZIPCMD=/usr/bin/unzip \
+       R_ZIPCMD=/usr/bin/zip \
+       R_PRINTCMD=/usr/bin/lpr \
+       LIBnn=lib \
+       AWK=/usr/bin/awk \
+       CFLAGS="-g -O2 -fstack-protector -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g" \
+       CXXFLAGS="-g -O2 -fstack-protector -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g" \
+       ./configure --enable-R-shlib \
+                   --enable-memory-profiling \
+                   --with-readline \
+                   --with-blas="-lopenblas" \
+                   --with-tcltk \
+                   --disable-nls \
+                   --without-recommended-packages \
+    && make \
+    && make install \
+    && cd / \
+    && rm r-source.tar.gz \
+    && rm -rf r-source
+
+
+# Install RStudio, rJava and JAGS
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
     && gpg -a --export E084DAB9 | apt-key add - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-         r-base-dev \
          jags \
     && R CMD javareconf \
     && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' > /etc/R/Rprofile.site \
