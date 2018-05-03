@@ -63,7 +63,7 @@ RUN    apt-get update \
          unzip \
          xfonts-base \
          xvfb \
-zip \
+         zip \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/*
