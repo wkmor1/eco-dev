@@ -8,7 +8,7 @@ RUN    apt-get update \
          apt-transport-https \
          curl \
          cmake \
-         default-jdk \
+         openjdk-8-jdk \
          fonts-texgyre \
          fonts-droid-fallback \
          g++-multilib \
