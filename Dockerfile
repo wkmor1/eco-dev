@@ -38,6 +38,7 @@ RUN    apt-get update \
          libproj-dev \
          libreadline-dev \
          librsvg2-dev \
+         libssl-dev \
          libtiff5-dev \
          libqt4-dev \
          libv8-dev \
@@ -128,7 +129,7 @@ RUN    mkdir -p r-source \
     && rm r-source.tar.gz \
     && rm -rf r-source
 
-# Install RStudio, rJava and JAGS
+# Install RStudio, JAGS, rJava, devtools and  
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
@@ -136,9 +137,9 @@ RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/
     && apt-get update \
     && apt-get install -y --no-install-recommends \
          jags \
-    && R CMD javareconf \
     && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
-    && R -e 'install.packages("rJava")' \
+    && R -e 'install.packages("rJava", "devtools")' \
+    && R -e 'devtools::install_github("wrathematics/openblasctl")' \
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
