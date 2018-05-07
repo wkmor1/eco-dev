@@ -129,7 +129,7 @@ RUN    mkdir -p r-source \
     && rm r-source.tar.gz \
     && rm -rf r-source
 
-# Install RStudio, JAGS, rJava, devtools and  
+# Install RStudio, JAGS, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
