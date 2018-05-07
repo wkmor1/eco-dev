@@ -138,7 +138,7 @@ RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/
     && apt-get install -y --no-install-recommends \
          jags \
     && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
-    && R -e 'install.packages("rJava", "devtools")' \
+    && R -e 'install.packages(c("rJava", "devtools"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
