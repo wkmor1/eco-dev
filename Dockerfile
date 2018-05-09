@@ -1,4 +1,4 @@
-FROM ubuntu:bionic
+FROM nvidia/cuda:8.0-cudnn6-runtime-ubuntu16.04
 MAINTAINER William K Morris <>
 
 # Install Ubuntu packages
@@ -92,7 +92,7 @@ RUN    RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | 
 
 # Install TensorFlow
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install tensorflow --ignore-installed six
+    && /usr/local/bin/pip3 install --upgrade nvidia-ml-py3 tensorflow-gpu --ignore-installed six
     
 # Install Julia
 RUN    mkdir -p /opt/julia \
