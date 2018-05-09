@@ -126,6 +126,7 @@ RUN    mkdir -p r-source \
     && make \
     && make install \
     && cd / \
+    && unset R_HOME \
     && rm r-source.tar.gz \
     && rm -rf r-source
 
