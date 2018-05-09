@@ -1,42 +1,50 @@
-FROM ubuntu:trusty
+FROM ubuntu:bionic
 MAINTAINER William K Morris <>
 
 # Install Ubuntu packages
+ENV    DEBIAN_FRONTEND noninteractive
 RUN    apt-get update \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
          curl \
          cmake \
-         default-jdk \
-         default-jre \
+         openjdk-8-jdk \
          fonts-texgyre \
-         fonts-droid \
+         fonts-droid-fallback \
          g++-multilib \
          gdal-bin \
          gdebi-core \
          gfortran \
          ghostscript \
          git \
-         libavcodec-extra-54 \
-         libavdevice53 \
-         libavfilter3 \
+         gnupg \
+         libavcodec-extra \
+         libavdevice-dev \
+         libavfilter-dev \
          libboost-filesystem-dev \
          libboost-program-options-dev \
          libboost-thread-dev \
-         libcairo2-dev \
+         libbz2-dev \
+         libcurl4-openssl-dev \
          libfftw3-dev \
          libgdal-dev \
+         libicu-dev \
+         liblzma5 \
          libmagick++-dev \
-         libmagickwand5 \
+         libopenblas-dev \
+         libpango1.0-dev \
+         libpgf-dev \
          libpoppler-cpp-dev \
          libproj-dev \
+         libreadline-dev \
          librsvg2-dev \
+         libssl-dev \
+         libtiff5-dev \
          libqt4-dev \
          libv8-dev \
          libzmq3-dev \
+         locales \
          lmodern \
-         openssh-server \
-         pgf \
          pdf2svg \
          python3-dev \
          python3-gdal \
@@ -45,11 +53,17 @@ RUN    apt-get update \
          qpdf \
          sudo \
          supervisor \
+         tk8.6-dev \
          texinfo \
          texlive \
-         texlive-humanities \
-         texlive-latex-extra \
          texlive-bibtex-extra \
+         texlive-extra-utils \
+         texlive-fonts-extra \
+         texlive-humanities \
+         texlive-latex-extra \ 
+         unzip \
+         xfonts-base \
+         xvfb \
          zip \
     && apt-get clean \
     && apt-get autoremove \
@@ -63,39 +77,71 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
-# Download Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
-RUN    RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
+# Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
+RUN    RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | grep h3 | head -1 | sed 's/<[^>]*>//g' | sed 's/[A-Z ]*//g') \
+    && RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
     && curl \
+         -o r-source.tar.gz https://cran.r-project.org/src/base/R-3/R-$RVER.tar.gz \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L https://github.com/jsta/openbugs/archive/3.2.3.tar.gz
 
-# Install Jupyter and TensorFlow
+# Install TensorFlow
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install notebook tensorflow --ignore-installed six
-
+    && /usr/local/bin/pip3 install tensorflow --ignore-installed six
+    
 # Install Julia
 RUN    mkdir -p /opt/julia \
     && tar xzf julia.tar.gz -C /opt/julia --strip 1 \
     && ln -s /opt/julia/bin/julia /usr/local/bin/julia \
     && rm -rf julia.tar.gz
 
-# Install R, RStudio, rJava and JAGS
+# Install R
+RUN    mkdir -p r-source \ 
+    && tar xzf r-source.tar.gz -C r-source --strip 1 \
+    && cd r-source \
+    && R_PAPERSIZE=letter \
+       R_BATCHSAVE="--no-save --no-restore" \
+       R_BROWSER=xdg-open \
+       PAGER=/usr/bin/pager \
+       PERL=/usr/bin/perl \
+       R_UNZIPCMD=/usr/bin/unzip \
+       R_ZIPCMD=/usr/bin/zip \
+       R_PRINTCMD=/usr/bin/lpr \
+       LIBnn=lib \
+       AWK=/usr/bin/awk \
+       CFLAGS="-g -O2 -fstack-protector -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g" \
+       CXXFLAGS="-g -O2 -fstack-protector -Wformat -Werror=format-security -D_FORTIFY_SOURCE=2 -g" \
+       ./configure --enable-R-shlib \
+                   --enable-memory-profiling \
+                   --with-readline \
+                   --with-blas="-lopenblas" \
+                   --with-tcltk \
+                   --disable-nls \
+                   --without-recommended-packages \
+    && make \
+    && make install \
+    && cd / \
+    && unset R_HOME \
+    && rm r-source.tar.gz \
+    && rm -rf r-source
+
+# Install RStudio, JAGS, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
-RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list \
+RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
     && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
     && gpg -a --export E084DAB9 | apt-key add - \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
-         r-base-dev \
          jags \
-    && R CMD javareconf \
-    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' > /etc/R/Rprofile.site \
-    && R -e 'install.packages("rJava")' \
+    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
+    && R -e 'install.packages(c("rJava", "devtools"))' \
+    && R -e 'devtools::install_github("wrathematics/openblasctl")' \
+    && echo 'openblasctl::openblas_set_num_threads(1)' >> /usr/local/lib/R/etc/Rprofile.site \
     && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
@@ -120,19 +166,9 @@ RUN    mkdir -p openbugs \
     && rm OpenBUGS-3.2.3.tar.gz \
     && rm -rf openbugs
 
-# Install Inconsolata
-RUN    unzip inconsolata.tds.zip -d /usr/share/texlive/texmf-dist \
-    && echo "Map zi4.map" >> /usr/share/texlive/texmf-dist/web2c/updmap.cfg \
-    && cd /usr/share/texlive/texmf-dist \
-    && mktexlsr \
-    && updmap-sys \
-    && cd / \
-    && rm -rf inconsolata.tds.zip
-
 # Copy scripts
 COPY   supervisord.conf /etc/supervisor/conf.d/
 COPY   userconf.sh /usr/bin/
-COPY   jupyter_notebook_config.py /
 
 # Config
 RUN    mkdir -p /var/log/supervisor /var/run/sshd \
@@ -144,7 +180,5 @@ RUN    mkdir -p /var/log/supervisor /var/run/sshd \
 
 # Open ports
 EXPOSE 8787
-EXPOSE 8888
-
 # Start supervisor
-CMD    supervisord
+CMD supervisord
