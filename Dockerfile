@@ -46,7 +46,6 @@ RUN    apt-get update \
          libzmq3-dev \
          locales \
          lmodern \
-         psmisc \
          pdf2svg \
          python3-dev \
          python3-gdal \
@@ -134,11 +133,12 @@ RUN    mkdir -p r-source \
 
 # Install RStudio, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
-RUN    echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
+RUN    apt-get update \
+    && gdebi -n rstudio.deb \
+    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages(c("rJava", "devtools"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
     && echo 'openblasctl::openblas_set_num_threads(1)' >> /usr/local/lib/R/etc/Rprofile.site \
-    && gdebi -n rstudio.deb \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin \
