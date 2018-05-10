@@ -46,6 +46,7 @@ RUN    apt-get update \
          libzmq3-dev \
          locales \
          lmodern \
+         psmisc \
          pdf2svg \
          python3-dev \
          python3-gdal \
