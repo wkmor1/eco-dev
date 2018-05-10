@@ -18,6 +18,7 @@ RUN    apt-get update \
          ghostscript \
          git \
          gnupg \
+         jags \
          libavcodec-extra \
          libavdevice-dev \
          libavfilter-dev \
@@ -130,15 +131,9 @@ RUN    mkdir -p r-source \
     && rm r-source.tar.gz \
     && rm -rf r-source
 
-# Install RStudio, JAGS, rJava, devtools and openblasctl
+# Install RStudio, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
-RUN    echo "deb https://cran.rstudio.com/bin/linux/ubuntu artful/" >> /etc/apt/sources.list \
-    && gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys E084DAB9 \
-    && gpg -a --export E084DAB9 | apt-key add - \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-         jags \
-    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
+RUN    echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages(c("rJava", "devtools"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
     && echo 'openblasctl::openblas_set_num_threads(1)' >> /usr/local/lib/R/etc/Rprofile.site \
