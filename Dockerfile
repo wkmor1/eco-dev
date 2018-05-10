@@ -131,7 +131,7 @@ RUN    mkdir -p r-source \
     && rm r-source.tar.gz \
     && rm -rf r-source
 
-# Install RStudio, JAGS, rJava, devtools and openblasctl
+# Install RStudio, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages(c("rJava", "devtools"))' \
