@@ -123,7 +123,6 @@ RUN    mkdir -p r-source \
                    --with-blas="-lopenblas" \
                    --with-tcltk \
                    --disable-nls \
-                   --without-recommended-packages \
     && make \
     && make install \
     && cd / \
