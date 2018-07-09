@@ -79,7 +79,8 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
 # Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
-RUN    RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | grep h3 | head -1 | sed 's/<[^>]*>//g' | sed 's/[A-Z ]*//g') \
+RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egrep -o '[0-9]+(\.[0-9]+)+' | head -1) \
+#      RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | grep h3 | head -1 | sed 's/<[^>]*>//g' | sed 's/[A-Z ]*//g') \
     && RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
