@@ -48,6 +48,7 @@ RUN    apt-get update \
          locales \
          lmodern \
          pdf2svg \
+         python-gdal \
          python3-dev \
          python3-gdal \
          python3-pip \
