@@ -37,11 +37,12 @@ RUN    apt-get update \
          libpgf-dev \
          libpoppler-cpp-dev \
          libproj-dev \
+         libqt4-dev \
          libreadline-dev \
          librsvg2-dev \
          libssl-dev \
          libtiff5-dev \
-         libqt4-dev \
+         libudunits2-dev \
          libv8-dev \
          libzmq3-dev \
          locales \
@@ -80,7 +81,6 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
 
 # Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
 RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egrep -o '[0-9]+(\.[0-9]+)+' | head -1) \
-#      RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | grep h3 | head -1 | sed 's/<[^>]*>//g' | sed 's/[A-Z ]*//g') \
     && RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
@@ -88,7 +88,6 @@ RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egr
          -o r-source.tar.gz https://cran.r-project.org/src/base/R-3/R-$RVER.tar.gz \
          -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
-         -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L https://github.com/jsta/openbugs/archive/3.2.3.tar.gz
 
@@ -145,11 +144,6 @@ RUN    apt-get update \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/* rstudio.deb
-
-# Install Zonation
-RUN    mkdir -p zonation \
-    && tar xzf zonation.tar.gz -C zonation \
-    && rm -rf zonation.tar.gz
 
 # Install OpenBUGS
 RUN    mkdir -p openbugs \
