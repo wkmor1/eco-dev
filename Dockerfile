@@ -80,7 +80,6 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
 
 # Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
 RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egrep -o '[0-9]+(\.[0-9]+)+' | head -1) \
-#      RVER=$(curl https://cran.r-project.org/doc/manuals/r-release/NEWS.html | grep h3 | head -1 | sed 's/<[^>]*>//g' | sed 's/[A-Z ]*//g') \
     && RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
@@ -135,7 +134,7 @@ RUN    mkdir -p r-source \
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    apt-get update \
     && gdebi -n rstudio.deb \
-    && echo 'options(repos = list(CRAN = "https://cran.rstudio.com/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
+    && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages(c("rJava", "devtools"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
     && echo 'openblasctl::openblas_set_num_threads(1)' >> /usr/local/lib/R/etc/Rprofile.site \
