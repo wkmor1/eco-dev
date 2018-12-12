@@ -94,7 +94,7 @@ RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egr
 
 # Install TensorFlow
 RUN    pip3 install --upgrade pip \
-    && /usr/local/bin/pip3 install tensorflow --ignore-installed six
+    && /usr/local/bin/pip3 install tensorflow tensorflow-probability --ignore-installed six
     
 # Install Julia
 RUN    mkdir -p /opt/julia \
