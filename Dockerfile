@@ -73,7 +73,7 @@ RUN    apt-get update \
     && rm -rf var/lib/apt/lists/*
 
 # Set paths and locale
-ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:/zonation/zig4/bin:$PATH
+ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:$PATH
 ENV LANG            en_US.UTF-8
 ENV LANGUAGE        $LANG
 RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
