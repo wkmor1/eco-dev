@@ -82,12 +82,11 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
 
 # Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
 RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egrep -o '[0-9]+(\.[0-9]+)+' | head -1) \
-    && RSTUDIOVER=$(curl https://s3.amazonaws.com/rstudio-server/current.ver) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
     && curl \
          -o r-source.tar.gz https://cran.r-project.org/src/base/R-3/R-$RVER.tar.gz \
-         -o rstudio.deb https://download2.rstudio.org/server/bionic/amd64/rstudio-server-$RSTUDIOVER-amd64.deb \
+         -OL https://www.rstudio.org/download/latest/stable/server/bionic/rstudio-server-latest-amd64.deb \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L https://github.com/jsta/openbugs/archive/3.2.3.tar.gz
@@ -134,7 +133,7 @@ RUN    mkdir -p r-source \
 # Install RStudio, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    apt-get update \
-    && gdebi -n rstudio.deb \
+    && gdebi -n rstudio-server-latest-amd64.deb \
     && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages(c("rJava", "devtools"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
@@ -144,7 +143,7 @@ RUN    apt-get update \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc-citeproc /usr/local/bin \
     && apt-get clean \
     && apt-get autoremove \
-    && rm -rf var/lib/apt/lists/* rstudio.deb
+    && rm -rf var/lib/apt/lists/* rstudio-server-latest-amd64.deb
 
 # Install OpenBUGS
 RUN    mkdir -p openbugs \
