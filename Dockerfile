@@ -18,6 +18,7 @@ RUN    apt-get update \
          ghostscript \
          git \
          gnupg \
+         iputils-ping \
          jags \
          libavcodec-extra \
          libavdevice-dev \
