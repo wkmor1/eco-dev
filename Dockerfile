@@ -66,6 +66,7 @@ RUN    apt-get update \
          texlive-humanities \
          texlive-latex-extra \ 
          unzip \
+         wget \
          xfonts-base \
          xvfb \
          zip \
