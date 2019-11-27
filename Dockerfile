@@ -85,7 +85,7 @@ RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egr
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
     && curl \
          -o r-source.tar.gz https://cran.r-project.org/src/base/R-3/R-$RVER.tar.gz \
-         -o rstudio.deb https://download2.rstudio.org/rstudio-server-$RSTUDIOVER-amd64.deb \
+         -o rstudio.deb https://download2.rstudio.org/server/trusty/amd64/rstudio-server-1.2.5019-amd64.deb \
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL https://bintray.com/artifact/download/wkmor1/binaries/zonation.tar.gz \
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
