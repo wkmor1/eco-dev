@@ -75,7 +75,7 @@ RUN    apt-get update \
     && rm -rf var/lib/apt/lists/*
 
 # Set paths and locale
-ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:$PATH
+ENV PATH            /opt/julia:/usr/lib/rstudio-server/bin:/build/zig4:$PATH
 ENV LANG            en_US.UTF-8
 ENV LANGUAGE        $LANG
 RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
@@ -92,6 +92,15 @@ RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egr
          -o julia.tar.gz https://julialang-s3.julialang.org/bin/linux/x64/$JULIAMAJOR/julia-$JULIAVER-linux-x86_64.tar.gz \ 
          -OL http://mirrors.ctan.org/install/fonts/inconsolata.tds.zip \
          -o OpenBUGS-3.2.3.tar.gz -L https://github.com/jsta/openbugs/archive/3.2.3.tar.gz
+
+# Install Zonation
+RUN    git clone https://github.com/cbig/zonation-core \
+    && mkdir build \
+    && cd build \
+    && cmake ../zonation-core \
+    && make \
+    && cd .. \
+    && rm -rf zonation-core
 
 # Install TensorFlow
 RUN    pip3 install --upgrade pip \
