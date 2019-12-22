@@ -82,7 +82,7 @@ RUN    echo "en_US "$LANG" UTF-8" >> /etc/locale.gen \
     && locale-gen en_US $LANG \
     && update-locale LANG=$LANG LANGUAGE=$LANG
 
-# Download R, Rstudio, Julia, Zonation, Inconsolata and OpenBUGS
+# Download R, Rstudio, Julia, Inconsolata and OpenBUGS
 RUN    RVER=$(curl https://cran.r-project.org/banner.shtml | grep src/base | egrep -o '[0-9]+(\.[0-9]+)+' | head -1) \
     && JULIAVER=$(curl https://api.github.com/repos/JuliaLang/julia/releases/latest | grep tag_name | cut -d \" -f4 | sed 's/v//g') \
     && JULIAMAJOR=$(echo $JULIAVER | cut -c -3) \
@@ -146,7 +146,7 @@ ENV R_LIBS_USER ~/.r-dir/R/library
 RUN    apt-get update \
     && gdebi -n rstudio-server-latest-amd64.deb \
     && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
-    && R -e 'install.packages(c("rJava", "devtools"))' \
+    && R -e 'install.packages(c("rJava", "devtools", "dismo"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
     && echo 'openblasctl::openblas_set_num_threads(1)' >> /usr/local/lib/R/etc/Rprofile.site \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
@@ -156,6 +156,14 @@ RUN    apt-get update \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/* rstudio-server-latest-amd64.deb
 
+# Install Maxent
+RUN    git clone https://github.com/mrmaxent/Maxent.git \
+    && cd Maxent \
+    && make distribution \
+    && cp maxent.jar /usr/local/lib/R/site-library/dismo/java/maxent.jar \
+    && cd .. \
+    && rm -rf Maxent
+    
 # Install OpenBUGS
 RUN    mkdir -p openbugs \
     && tar xzf OpenBUGS-3.2.3.tar.gz -C openbugs --strip 1 \
