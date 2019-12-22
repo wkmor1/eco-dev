@@ -160,7 +160,7 @@ RUN    apt-get update \
 RUN    git clone https://github.com/mrmaxent/Maxent.git \
     && cd Maxent \
     && make distribution \
-    && cp maxent.jar /usr/local/lib/R/site-library/dismo/java/maxent.jar \
+    && cp maxent.jar /usr/local/lib/R/library/dismo/java/maxent.jar \
     && cd .. \
     && rm -rf Maxent
     
