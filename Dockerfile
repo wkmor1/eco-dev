@@ -143,6 +143,7 @@ RUN    mkdir -p r-source \
 
 # Install RStudio, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
+ENV NOT_CRAN true
 RUN    apt-get update \
     && gdebi -n rstudio-server-latest-amd64.deb \
     && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
