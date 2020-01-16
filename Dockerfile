@@ -143,9 +143,9 @@ RUN    mkdir -p r-source \
 
 # Install RStudio, rJava, devtools and openblasctl
 ENV R_LIBS_USER ~/.r-dir/R/library
-ENV NOT_CRAN true
 RUN    apt-get update \
     && gdebi -n rstudio-server-latest-amd64.deb \
+    && echo 'NOT_CRAN=true' >> /usr/local/lib/R/etc/Renviron.site \
     && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
     && R -e 'install.packages(c("rJava", "devtools", "dismo"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
