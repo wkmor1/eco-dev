@@ -147,8 +147,9 @@ RUN    apt-get update \
     && gdebi -n rstudio-server-latest-amd64.deb \
     && echo 'NOT_CRAN=true' >> /usr/local/lib/R/etc/Renviron.site \
     && echo 'options(repos = c(CRAN = "https://cloud.r-project.org/"), download.file.method = "libcurl")' >> /usr/local/lib/R/etc/Rprofile.site \
-    && R -e 'install.packages(c("rJava", "devtools", "dismo"))' \
+    && R -e 'install.packages(c("rJava", "devtools", "dismo", "blogdown"))' \
     && R -e 'devtools::install_github("wrathematics/openblasctl")' \
+    && R -e 'blogdown::install_hugo()' \
     && echo 'openblasctl::openblas_set_num_threads(1)' >> /usr/local/lib/R/etc/Rprofile.site \
     && echo r-libs-user=$R_LIBS_USER >> /etc/rstudio/rsession.conf \
     && ln -s /usr/lib/rstudio-server/bin/pandoc/pandoc /usr/local/bin \
