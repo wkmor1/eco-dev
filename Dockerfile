@@ -37,6 +37,7 @@ RUN    apt-get update \
          libpango1.0-dev \
          libpgf-dev \
          libpoppler-cpp-dev \
+         libpcre2-dev \
          libproj-dev \
          libqt4-dev \
          libreadline-dev \
