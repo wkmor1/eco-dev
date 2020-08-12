@@ -30,6 +30,7 @@ RUN    apt-get update \
          libcurl4-openssl-dev \
          libfftw3-dev \
          libgdal-dev \
+         libgit2-dev \
          libicu-dev \
          liblzma5 \
          libmagick++-dev \
