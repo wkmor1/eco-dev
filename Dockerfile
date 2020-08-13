@@ -28,6 +28,7 @@ RUN    apt-get update \
          libboost-thread-dev \
          libbz2-dev \
          libcurl4-openssl-dev \
+         libcurl4-gnutls-dev \
          libfftw3-dev \
          libgdal-dev \
          libgit2-dev \
