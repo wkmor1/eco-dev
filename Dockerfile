@@ -4,6 +4,8 @@ MAINTAINER William K Morris <>
 # Install Ubuntu packages
 ENV    DEBIAN_FRONTEND noninteractive
 RUN    apt-get update \
+    && apt-get build-dep -y \
+         libgit2-dev \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
          curl \
@@ -28,7 +30,6 @@ RUN    apt-get update \
          libboost-thread-dev \
          libbz2-dev \
          libcurl4-openssl-dev \
-         libcurl4-gnutls-dev \
          libfftw3-dev \
          libgdal-dev \
          libgit2-dev \
