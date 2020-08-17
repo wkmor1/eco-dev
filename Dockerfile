@@ -4,8 +4,6 @@ MAINTAINER William K Morris <>
 # Install Ubuntu packages
 ENV    DEBIAN_FRONTEND noninteractive
 RUN    apt-get update \
-    && apt-get build-dep -y \
-         libgit2-dev \
     && apt-get install -y --no-install-recommends \
          apt-transport-https \
          curl \
@@ -32,7 +30,6 @@ RUN    apt-get update \
          libcurl4-openssl-dev \
          libfftw3-dev \
          libgdal-dev \
-         libgit2-dev \
          libicu-dev \
          liblzma5 \
          libmagick++-dev \
@@ -74,6 +71,8 @@ RUN    apt-get update \
          xfonts-base \
          xvfb \
          zip \
+    && apt-get install -y --no-install-recommends \
+         libgit2-dev \
     && apt-get clean \
     && apt-get autoremove \
     && rm -rf var/lib/apt/lists/*
