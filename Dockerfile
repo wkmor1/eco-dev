@@ -29,7 +29,9 @@ RUN    apt-get update \
          libbz2-dev \
          libcurl4-openssl-dev \
          libfftw3-dev \
+         libfribidi-dev \
          libgdal-dev \
+         libharfbuzz-dev \
          libicu-dev \
          liblzma5 \
          libmagick++-dev \
