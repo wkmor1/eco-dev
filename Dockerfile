@@ -166,6 +166,7 @@ RUN    apt-get update \
 # Install Maxent
 RUN    git clone https://github.com/mrmaxent/Maxent.git \
     && cd Maxent \
+    && sed -i 's/float/double/g' density/Extractor.java \
     && make distribution \
     && cp maxent.jar /usr/local/lib/R/library/dismo/java/maxent.jar \
     && cd .. \
