@@ -58,6 +58,7 @@ RUN    apt-get update \
          python3-pip \
          python3-setuptools \
          qpdf \
+         subversion \
          sudo \
          supervisor \
          tk8.6-dev \
